@@ -97,11 +97,11 @@ function drawBall(){
 }
 function drawTiles(){
 	for (var i = 0; i<tiles.length; i++){
-		context.fillStyle="white"
-		context.fillRect(tiles[i].x,tiles[i].y,tiles[i].w,tiles[i].h)
+		if(tiles[i].active){
+			context.fillStyle="white"
+			context.fillRect(tiles[i].x,tiles[i].y,tiles[i].w,tiles[i].h)
+		}
 	}
-	// context.fillStyle="white"
-	// context.fillRect(tiles[0].x,tiles[0].y,tiles[0].w,tiles[0].h)
 }
 function moveBall(){
 	if (b1.y == 0 || b1.collidesWithPlayer()){
