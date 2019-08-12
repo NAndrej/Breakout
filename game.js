@@ -58,7 +58,7 @@ class Ball{
 		this.dirY=0 // 0 for 'doesnt move', 1 for up, -1 for down
 	}
 	collidesWithPlayer(){
-		return (this.y+10 == p1.y && (this.x >= p1.x && this.x <= p1.x+100))
+		return (this.y+10 == p1.y && (this.x >= p1.x && this.x <= p1.x+p1.width))
 
 		//todo: CollidesWithPlayer() shaize performance 
 	}
@@ -85,8 +85,12 @@ class Ball{
 		this.y += this.dirY * 5
 	}
 	killTiles(){
-		for (var i=0; i < tiles.length; i++){
-			// todo
+		for (var i = 0; i < tiles.length; i ++){
+			if(tiles[i].active)
+				if(this.x 	 >= tiles[i].x && this.x <= tiles[i].x+tiles[i].w && this.y-this.radius >= tiles[i].y && this.y-this.radius <= tiles[i].y+tiles[i].h){
+					tiles[i].kill()
+					this.dirY*=-1
+				}
 		}	
 	}
 }
