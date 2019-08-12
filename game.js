@@ -4,7 +4,7 @@ var width=500
 var height=500
 var leftArr = false;
 var rightArr = false
-
+var tiles = []
 function drawCanvas(){
 	context.fillStyle='lightblue'
 	context.fillRect(0,0,500,500)
@@ -54,7 +54,7 @@ class Ball{
 		this.y=y;
 		this.radius=radius
 		this.flying=false;
-		this.dirX=0 // 0 for 'doesnt move', 1 for up, -1 for down
+		this.dirX=0 // 0 for 'doesnt move', 1 for right, -1 for left
 		this.dirY=0 // 0 for 'doesnt move', 1 for up, -1 for down
 	}
 	collidesWithPlayer(){
@@ -69,13 +69,14 @@ class Ball{
 		context.fill()
 	}
 	checkCollision(){
+		// HANDLES WALL AND PLAYER COLLISION
 		if(this.y-this.radius <= 0 || this.collidesWithPlayer()){
 			this.dirY*=-1
 		}
 		if(this.x-this.radius <= 0 || this.x+this.radius >= width){
 			this.dirX*=-1
 		}
-
+		
 	}
 	move(){
 		this.checkCollision()
@@ -83,11 +84,16 @@ class Ball{
 		this.x += this.dirX * 5
 		this.y += this.dirY * 5
 	}
+	killTiles(){
+		for (var i=0; i < tiles.length; i++){
+			// todo
+		}	
+	}
 }
 b1 = new Ball(width/2,455,15)
  // TILE CLASS
 class Tile {
-	constructor(x,y,w,h,active) {
+	constructor(x,y,w,h) {
 		this.x=x;
 		this.y=y;
 		this.w=w;
@@ -98,7 +104,7 @@ class Tile {
 		this.active = false
 	}
 }
-var tiles = []
+
 var x = 10
 var y = 10
 var w = 100
@@ -155,6 +161,7 @@ function game(){
 	b1.draw()
 	if (b1.flying)
 		b1.move()
+	b1.killTiles()
 	drawTiles()
 }
 fps=60;
