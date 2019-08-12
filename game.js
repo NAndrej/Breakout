@@ -5,6 +5,8 @@ var height=500
 var leftArr = false;
 var rightArr = false
 var tiles = []
+var lives = 3
+var score = 0
 function drawCanvas(){
 	context.fillStyle='lightblue'
 	context.fillRect(0,0,500,500)
@@ -77,6 +79,23 @@ class Ball{
 			this.dirX*=-1
 		}
 		
+		if(this.y >= height){
+			if(lives == 1){
+				context.font = "70px Arial"
+				context.fillStyle = "red"
+				context.fillText("GAME OVER",width/2-210,height/2)
+				return 0;
+			}
+			else{
+				lives--;
+				this.respawn()
+			}
+		}
+	}
+	respawn(){
+		this.x=p1.x+(p1.width/2)
+		this.y=p1.y-p1.height
+		b1.flying=false
 	}
 	move(){
 		this.checkCollision()
@@ -90,6 +109,7 @@ class Ball{
 				if(this.x 	 >= tiles[i].x && this.x <= tiles[i].x+tiles[i].w && this.y-this.radius >= tiles[i].y && this.y-this.radius <= tiles[i].y+tiles[i].h){
 					tiles[i].kill()
 					this.dirY*=-1
+					score++;
 				}
 		}	
 	}
@@ -114,7 +134,7 @@ var y = 10
 var w = 100
 var h = 20
 for (var x = 15; x<=500; x+=123){	
-	for(var y = 12; y<=110; y+=30){
+	for(var y = 30; y<=130; y+=30){
 		tile = new Tile(x,y,w,h)
 		tiles.push(tile)
 	}
@@ -157,9 +177,32 @@ function eventHandler(){
 	     	rightArr = false
 	},false)
 }
+function drawText(){
+	context.font = "20px Arial"
+	context.fillStyle = "red"
+	context.fillText("Lives: "+lives,20,20)
 
+	context.font = "20px Arial"
+	context.fillStyle = "black"
+	context.fillText("Score: "+score,410,20)
+}
+function checkFinish(){
+	// var count = 0;
+	// for (var i = 0; i<tiles.length; i++){
+	// 	if (tiles[i].active)
+	// 		count++
+	// }
+	// if (count == 0){
+	// 	context.font = "70px Arial"
+	// 	context.fillStyle = "red"
+	// 	context.fillText("WELL DONE",width/2-210,height/2)
+	// 	return 0;
+	// }
+}
 function game(){
+	checkFinish();
 	drawCanvas()
+	drawText()
 	p1.draw()
 	p1.move()
 	b1.draw()
