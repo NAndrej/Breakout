@@ -7,6 +7,8 @@ var rightArr = false
 var tiles = []
 var lives = 3
 var score = 0
+var finish = false;
+var dead = false;
 function drawCanvas(){
 	context.fillStyle='lightblue'
 	context.fillRect(0,0,500,500)
@@ -22,6 +24,7 @@ class Player{
 		this.height=height;
 	}
 	canMove(dir){
+
 		if (dir == 'L')
 			return this.x >= 10
 		if (dir == 'R')
@@ -106,11 +109,23 @@ class Ball{
 	killTiles(){
 		for (var i = 0; i < tiles.length; i ++){
 			if(tiles[i].active)
-				if(this.x 	 >= tiles[i].x && this.x <= tiles[i].x+tiles[i].w && this.y-this.radius >= tiles[i].y && this.y-this.radius <= tiles[i].y+tiles[i].h){
+				if(this.x >= tiles[i].x && this.x <= tiles[i].x+tiles[i].w && this.y-this.radius >= tiles[i].y && this.y-this.radius <= tiles[i].y+tiles[i].h){
 					tiles[i].kill()
 					this.dirY*=-1
 					score++;
 				}
+		}
+		var count = 0;
+		for (var i = 0; i<tiles.length; i++){
+			if (tiles[i].active)
+				count++
+		}
+		if (count == 0){
+			context.font = "70px Arial"
+			context.fillStyle = "green"
+			context.fillText("WELL DONE",width/2-210,height/2)
+			this.respawn();
+			return 0;
 		}	
 	}
 }
@@ -123,6 +138,7 @@ class Tile {
 		this.w=w;
 		this.h=h;
 		this.active=true
+
 	}
 	kill(){
 		this.active = false
@@ -186,31 +202,17 @@ function drawText(){
 	context.fillStyle = "black"
 	context.fillText("Score: "+score,410,20)
 }
-function checkFinish(){
-	// var count = 0;
-	// for (var i = 0; i<tiles.length; i++){
-	// 	if (tiles[i].active)
-	// 		count++
-	// }
-	// if (count == 0){
-	// 	context.font = "70px Arial"
-	// 	context.fillStyle = "red"
-	// 	context.fillText("WELL DONE",width/2-210,height/2)
-	// 	return 0;
-	// }
-}
 function game(){
-	checkFinish();
-	drawCanvas()
-	drawText()
-	p1.draw()
-	p1.move()
-	b1.draw()
+	drawCanvas();
+	drawText();
+	p1.draw();
+	p1.move();
+	b1.draw();
 	if (b1.flying)
-		b1.move()
-	b1.killTiles()
-	drawTiles()
+		b1.move();
+	b1.killTiles();
+	drawTiles();
 }
 fps=60;
 setInterval(game,1000/fps);
-eventHandler()
+eventHandler();
